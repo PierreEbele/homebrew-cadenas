@@ -1,0 +1,45 @@
+name: Tests
+
+# Installs the formula from this tap, runs its test and Homebrew's strict
+# audit, on macOS and Linux.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  formula:
+    name: brew (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_NO_INSTALL_CLEANUP: 1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Homebrew on PATH (Linux)
+        if: runner.os == 'Linux'
+        run: echo "/home/linuxbrew/.linuxbrew/bin" >> "$GITHUB_PATH"
+      - name: Tap this repository
+        run: brew tap pierreebele/cadenas "$GITHUB_WORKSPACE"
+      - run: brew install --build-from-source pierreebele/cadenas/cadenas
+      - run: brew test pierreebele/cadenas/cadenas
+      - run: brew audit --strict --online pierreebele/cadenas/cadenas
+      - name: Encrypt and decrypt a file
+        run: |
+          cadenas --version
+          echo "secret" > pwd.txt
+          head -c 200000 /dev/urandom > data.bin
+          cadenas lock --password-file pwd.txt data.bin
+          cadenas verify --password-file pwd.txt data.bin.cadenas
+          cadenas unlock --password-file pwd.txt -o out.bin data.bin.cadenas
+          cmp data.bin out.bin
