@@ -2,8 +2,8 @@
 class Cadenas < Formula
   desc "Encrypt a file with a password; age-compatible"
   homepage "https://github.com/PierreEbele/cadenas"
-  url "https://registry.npmjs.org/cadenas/-/cadenas-1.5.0.tgz"
-  sha256 "798f8dcf5c631089cd9d1aad3d375532ba5ea1ab52ba41f8f1d99545a30b0ae5"
+  url "https://registry.npmjs.org/cadenas/-/cadenas-1.6.0.tgz"
+  sha256 "9a4d7b5c6047d6991beddfa5bbde9d181fbe0e5966cd3d64b9f2776d00af037c"
   license "MIT"
 
   depends_on "node"
