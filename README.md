@@ -22,10 +22,12 @@ cadenas --help
 
 ## Updating the formula (maintainers)
 
-`Formula/cadenas.rb` is generated in the main repository by
-`node scripts/packaging.js <version>` for each published version: copy it
-here. The [Tests](.github/workflows/tests.yml) workflow installs it, runs
-`brew test` and `brew audit --strict --online` on macOS and Linux.
+`Formula/cadenas.rb` is updated automatically at each release of cadenas:
+the `homebrew` job of the main repository's
+[release workflow](https://github.com/PierreEbele/cadenas/blob/main/.github/workflows/release.yml)
+generates it, installs it, runs `brew test` and `brew audit --strict --online`
+on macOS, then pushes it here. The [Tests](.github/workflows/tests.yml)
+workflow checks it again on macOS and Linux.
 
 Issues and security reports: see the
 [main repository](https://github.com/PierreEbele/cadenas).
